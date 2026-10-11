@@ -28,6 +28,43 @@
       padding-bottom: calc(70px + var(--safe-bottom)); 
     }
 
+    /* SPLASH SCREEN STYLES */
+    #splashScreen {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--primary); /* Uses your app's blue color */
+      color: white;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 9999; /* Keeps it on top of everything */
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+    
+    #splashScreen.hidden {
+      opacity: 0; visibility: hidden;
+    }
+    
+    .splash-content {
+      text-align: center;
+      animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    
+    .splash-icon {
+      width: 80px; height: 80px; stroke: white; fill: none; stroke-width: 1.5;
+      margin-bottom: 16px;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .splash-content h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .splash-content p { font-size: 1rem; opacity: 0.8; font-weight: 500; }
+
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
     /* App Header */
     header {
       position: fixed; top: 0; left: 0; right: 0; height: 60px;
@@ -106,6 +143,18 @@
   </style>
 </head>
 <body>
+
+    <!-- SPLASH SCREEN -->
+  <div id="splashScreen">
+    <div class="splash-content">
+      <!-- Animated Medical Cross Icon -->
+      <svg viewBox="0 0 24 24" class="splash-icon">
+        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" fill="white" stroke="none"></path>
+      </svg>
+      <h1>MedIntern</h1>
+      <p>Clinical History Tracker</p>
+    </div>
+  </div>
 
   <header class="no-print">
     <h2>MedIntern Tracker</h2>
@@ -315,6 +364,10 @@
 
     // --- 5. APP INITIALIZATION ---
     document.addEventListener("DOMContentLoaded", () => {
+
+        setTimeout(() => {
+        document.getElementById('splashScreen').classList.add('hidden');
+      }, 2200);
       generateBHT();
 
       const savedName = safeGetStorage('internName', '');
