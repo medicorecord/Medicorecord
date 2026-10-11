@@ -31,39 +31,21 @@
     /* SPLASH SCREEN STYLES */
     #splashScreen {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: var(--primary); /* Uses your app's blue color */
+      background: var(--primary);
       color: white;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      z-index: 9999; /* Keeps it on top of everything */
+      z-index: 9999; 
       transition: opacity 0.6s ease, visibility 0.6s ease;
     }
+    #splashScreen.hidden { opacity: 0; visibility: hidden; }
     
-    #splashScreen.hidden {
-      opacity: 0; visibility: hidden;
-    }
-    
-    .splash-content {
-      text-align: center;
-      animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    }
-    
-    .splash-icon {
-      width: 80px; height: 80px; stroke: white; fill: none; stroke-width: 1.5;
-      margin-bottom: 16px;
-      animation: float 3s ease-in-out infinite;
-    }
-    
+    .splash-content { text-align: center; animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    .splash-icon { width: 80px; height: 80px; stroke: white; fill: none; stroke-width: 1.5; margin-bottom: 16px; animation: float 3s ease-in-out infinite; }
     .splash-content h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.5px; }
     .splash-content p { font-size: 1rem; opacity: 0.8; font-weight: 500; }
 
-    @keyframes popIn {
-      0% { transform: scale(0.8); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
-    }
+    @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
     /* App Header */
     header {
@@ -101,20 +83,22 @@
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
     .card { background: var(--card-bg); border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-    .card-title { font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .card-title { font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--bg); padding-bottom: 8px;}
     
     .intern-box { border: 2px solid var(--primary); background: #eff6ff; }
 
     /* Forms */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .form-group { margin-bottom: 16px; }
+    .full-width { grid-column: 1 / -1; }
     label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.85rem; color: var(--text-main); }
     input, select, textarea {
-      width: 100%; padding: 14px; border: 1px solid var(--border);
-      border-radius: 8px; font-size: 1rem; background: var(--bg);
+      width: 100%; padding: 12px; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 0.95rem; background: var(--bg);
       appearance: none; 
     }
     input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
-    textarea { min-height: 100px; resize: vertical; }
+    textarea { min-height: 80px; resize: vertical; }
 
     button.btn-submit {
       background: var(--primary); color: white; border: none;
@@ -124,8 +108,11 @@
     }
     button.btn-submit:active { transform: scale(0.98); }
 
-    /* Lists */
-    .search-bar { display: flex; gap: 8px; margin-bottom: 16px; }
+    /* Search Lists */
+    .search-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .search-bar select { width: 110px; padding: 12px; }
+    .search-bar input { flex: 1; min-width: 150px; }
+    
     .patient-card { border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 12px; background: white; }
     .patient-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
     .patient-header h3 { font-size: 1.1rem; color: var(--text-main); }
@@ -144,10 +131,9 @@
 </head>
 <body>
 
-    <!-- SPLASH SCREEN -->
+  <!-- SPLASH SCREEN -->
   <div id="splashScreen">
     <div class="splash-content">
-      <!-- Animated Medical Cross Icon -->
       <svg viewBox="0 0 24 24" class="splash-icon">
         <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" fill="white" stroke="none"></path>
       </svg>
@@ -165,7 +151,7 @@
   <div id="formView" class="view active">
     <form id="historyForm">
       
-      <!-- Top Box for Medical Student -->
+      <!-- Recorded By Box -->
       <div class="card intern-box">
         <div class="form-group" style="margin-bottom: 0;">
           <label for="recordedBy" style="color: var(--primary-dark);">Recorded By (Student / Intern Name) *</label>
@@ -173,23 +159,46 @@
         </div>
       </div>
 
+      <!-- Admission & Location -->
+      <div class="card">
+        <div class="card-title">Admission & Location</div>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="patientId">BHT / Patient ID (Auto-Generated) *</label>
+            <input type="text" id="patientId" required readonly style="background-color: #e2e8f0; color: #0f172a; font-weight: bold; cursor: not-allowed; border: 1px dashed #94a3b8; opacity: 1; -webkit-text-fill-color: #0f172a;">
+          </div>
+          <div class="form-group">
+            <label for="admissionDate">Date of Admission</label>
+            <input type="date" id="admissionDate" required>
+          </div>
+          <div class="form-group">
+            <label for="admissionTime">Time of Admission</label>
+            <input type="time" id="admissionTime" required>
+          </div>
+          <div class="form-group">
+            <label for="ward">Ward No *</label>
+            <input type="text" id="ward" required placeholder="e.g. Ward 12">
+          </div>
+          <div class="form-group">
+            <label for="bedNumber">Bed No *</label>
+            <input type="text" id="bedNumber" required placeholder="e.g. Bed 5">
+          </div>
+        </div>
+      </div>
+
+      <!-- Patient Demographics -->
       <div class="card">
         <div class="card-title">Patient Demographics</div>
-        <div class="form-group">
-          <label for="patientId">BHT / Patient ID (Auto-Generated) *</label>
-          <input type="text" id="patientId" required readonly 
-                 style="background-color: #e2e8f0; color: #0f172a; font-weight: bold; cursor: not-allowed; border: 1px dashed #94a3b8; opacity: 1; -webkit-text-fill-color: #0f172a;">
-        </div>
         <div class="form-group">
           <label for="patientName">Patient Name *</label>
           <input type="text" id="patientName" required>
         </div>
-        <div style="display: flex; gap: 12px;">
-          <div class="form-group" style="flex: 1;">
+        <div class="form-grid">
+          <div class="form-group">
             <label for="age">Age *</label>
             <input type="number" id="age" required inputmode="numeric">
           </div>
-          <div class="form-group" style="flex: 1.5;">
+          <div class="form-group">
             <label for="gender">Gender *</label>
             <select id="gender" required>
               <option value="Male">Male</option>
@@ -197,21 +206,38 @@
               <option value="Other">Other</option>
             </select>
           </div>
+          <div class="form-group">
+            <label for="maritalStatus">Marital Status</label>
+            <select id="maritalStatus">
+              <option value="">Select</option>
+              <option value="Single">Single</option>
+              <option value="Married">Married</option>
+              <option value="Widowed">Widowed</option>
+              <option value="Divorced">Divorced</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="childrenCount">No. of Children</label>
+            <input type="number" id="childrenCount" inputmode="numeric" placeholder="e.g. 2">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="occupation">Occupation</label>
+          <input type="text" id="occupation" placeholder="Important for PVD/Bladder CA cases">
+        </div>
+        <div class="form-group">
+          <label for="residence">Residence / Endemic Area</label>
+          <input type="text" id="residence" placeholder="Town/City (e.g. Endemic Goitre area)">
+        </div>
+        <div class="form-group">
+          <label for="guardianDetails">Guardian's Details (If applicable)</label>
+          <input type="text" id="guardianDetails" placeholder="Name and Contact">
         </div>
       </div>
 
+      <!-- Case Classification -->
       <div class="card">
-        <div class="card-title">Location & Classification</div>
-        <div style="display: flex; gap: 12px;">
-          <div class="form-group" style="flex: 1;">
-            <label for="ward">Ward *</label>
-            <input type="text" id="ward" required placeholder="Ward 12">
-          </div>
-          <div class="form-group" style="flex: 1;">
-            <label for="bedNumber">Bed No *</label>
-            <input type="text" id="bedNumber" required placeholder="Bed 5">
-          </div>
-        </div>
+        <div class="card-title">Case Classification</div>
         <div class="form-group">
           <label for="specialty">Specialty *</label>
           <select id="specialty" onchange="updateCaseTypes()" required>
@@ -223,50 +249,80 @@
             <option value="Psychiatry">Psychiatry</option>
           </select>
         </div>
-        <div class="form-group">
-          <label for="caseCategory">Category *</label>
-          <select id="caseCategory" onchange="updateCaseTypes()" required>
-            <option value="Long Case">Long Case</option>
-            <option value="Short Case">Short Case</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="caseType">Specific Presentation *</label>
-          <select id="caseType" required>
-            <option value="">Select specialty first</option>
-          </select>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="caseCategory">Category *</label>
+            <select id="caseCategory" onchange="updateCaseTypes()" required>
+              <option value="Long Case">Long Case</option>
+              <option value="Short Case">Short Case</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="caseType">Presentation *</label>
+            <select id="caseType" required>
+              <option value="">Select specialty first</option>
+            </select>
+          </div>
         </div>
       </div>
 
+      <!-- Clinical History -->
       <div class="card">
         <div class="card-title">Clinical History</div>
         <div class="form-group">
-          <label for="presentingComplaint">1. Presenting Complaint (PC) *</label>
-          <textarea id="presentingComplaint" required placeholder="Chief complaints..."></textarea>
+          <label for="presentingComplaint">1. Presenting Complaint (PC) with Duration *</label>
+          <textarea id="presentingComplaint" required placeholder="Chief complaints (e.g. Dysphagia for 3 months)"></textarea>
         </div>
         <div class="form-group">
-          <label for="historyPresentingIllness">2. History of Presenting Illness (HPI) *</label>
-          <textarea id="historyPresentingIllness" required placeholder="Chronological analysis..."></textarea>
+          <label for="historyPresentingIllness">2. History of Presenting Complaint (HPC) *</label>
+          <textarea id="historyPresentingIllness" required placeholder="SOCRATES for pain. Include Onset, Progression, Aggravating/Relieving Factors, Associated Factors, Complications, and previous interventions."></textarea>
         </div>
         <div class="form-group">
-          <label for="pastMedicalHistory">3. Past Medical & Surgical History (PMH)</label>
-          <textarea id="pastMedicalHistory" placeholder="DM, HTN, Asthma..."></textarea>
+          <label for="systemicReview">3. Systemic Inquiry</label>
+          <textarea id="systemicReview" placeholder="General (Fever, Weight Loss), CVS, Respiratory, GIT, CNS, GU, MSK, Thyroid..."></textarea>
+        </div>
+      </div>
+
+      <!-- Past Medical & Surgical -->
+      <div class="card">
+        <div class="card-title">Past History</div>
+        <div class="form-group">
+          <label for="pastMedicalHistory">4. Past Medical History (PMH)</label>
+          <textarea id="pastMedicalHistory" placeholder="MI, Jaundice, TB, High BP, Rheumatic Fever, Epilepsy, Asthma, Diabetes, Stroke..."></textarea>
         </div>
         <div class="form-group">
-          <label for="drugAndAllergies">4. Drug History & Allergies</label>
-          <textarea id="drugAndAllergies" placeholder="Medications, reactions..."></textarea>
+          <label for="surgicalHistory">5. Past Surgical History</label>
+          <textarea id="surgicalHistory" placeholder="Previous surgeries, Elective/Emergency, Anaesthesia complications..."></textarea>
+        </div>
+      </div>
+
+      <!-- Drugs & Allergies -->
+      <div class="card">
+        <div class="card-title">Drugs & Allergies</div>
+        <div class="form-group">
+          <label for="drugHistory">6. Drug History</label>
+          <textarea id="drugHistory" placeholder="Current medications, OTC, Herbals, Contraceptives. Note drugs to omit/convert..."></textarea>
         </div>
         <div class="form-group">
-          <label for="familyHistory">5. Family History</label>
-          <textarea id="familyHistory" placeholder="Familial diseases..."></textarea>
+          <label for="allergyHistory">7. Allergy History</label>
+          <textarea id="allergyHistory" placeholder="Food, Drugs, Plaster, Contrast, POP allergies..."></textarea>
+        </div>
+      </div>
+
+      <!-- Social & Menstrual -->
+      <div class="card">
+        <div class="card-title">Social & Family History</div>
+        <div class="form-group">
+          <label for="familyHistory">8. Family History</label>
+          <textarea id="familyHistory" placeholder="Similar illnesses in family, major conditions..."></textarea>
         </div>
         <div class="form-group">
-          <label for="socialHistory">6. Social & Personal History</label>
-          <textarea id="socialHistory" placeholder="Smoking, occupation..."></textarea>
+          <label for="socialHistory">9. Social & Environmental History</label>
+          <textarea id="socialHistory" placeholder="Education, Financial, Habits (Smoking/Alcohol/Beetle), Distance to hospital, Toilet type..."></textarea>
         </div>
         <div class="form-group">
-          <label for="systemicReview">7. Systemic Review</label>
-          <textarea id="systemicReview" placeholder="CVS, RS, GIT..."></textarea>
+          <label for="menstrualHistory">10. Menstrual History (If applicable)</label>
+          <textarea id="menstrualHistory" placeholder="Age of menarche, menopause, regularity..."></textarea>
         </div>
       </div>
 
@@ -279,7 +335,13 @@
   <!-- SEARCH VIEW -->
   <div id="searchView" class="view">
     <div class="card search-bar">
-      <input type="text" id="searchInput" placeholder="Search BHT, Ward, Bed..." style="flex:1;">
+      <select id="searchFilter">
+        <option value="all">Search All</option>
+        <option value="name">Patient Name</option>
+        <option value="ward">Ward No</option>
+        <option value="bed">Bed No</option>
+      </select>
+      <input type="text" id="searchInput" placeholder="Search...">
       <button class="btn-submit" style="width: auto; padding: 0 20px;" onclick="searchRecords()">
         <svg style="width: 20px; height: 20px; stroke: white; fill: none; stroke-width: 2;" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
       </button>
@@ -319,13 +381,13 @@
   </nav>
 
   <script>
-    // --- 1. GLOBAL ERROR CATCHER (For Mobile Debugging) ---
+    // --- 1. GLOBAL ERROR CATCHER ---
     window.onerror = function(message, source, lineno, colno, error) {
       alert("🚨 JavaScript Crash!\n\nError: " + message + "\nLine: " + lineno);
       return false;
     };
 
-    // --- 2. FAILSAFE STORAGE ENGINE ---
+    // --- 2. FAILSAFE STORAGE ---
     function safeGetStorage(key, defaultValue) {
       try { return localStorage.getItem(key) || defaultValue; } 
       catch (e) { return defaultValue; }
@@ -341,41 +403,35 @@
       const dateStr = date.getFullYear().toString().slice(-2) + 
                       String(date.getMonth() + 1).padStart(2, '0') + 
                       String(date.getDate()).padStart(2, '0');
-      
       const randomStr = Math.random().toString(36).substring(2, 6).toUpperCase();
       const bhtField = document.getElementById('patientId');
-      if (bhtField) {
-        bhtField.value = `BHT-${dateStr}-${randomStr}`;
-      }
+      if (bhtField) bhtField.value = `BHT-${dateStr}-${randomStr}`;
+      
+      // Auto-set Date and Time
+      document.getElementById('admissionDate').value = date.toISOString().split('T')[0];
+      document.getElementById('admissionTime').value = date.toTimeString().slice(0,5);
     }
 
-    // --- 4. DATABASE INITIALIZATION ---
+    // --- 4. DATABASE INIT ---
     const SUPABASE_URL = "https://menaxnasyjhtbwnbarfm.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lbmF4bmFzeWpodGJ3bmJhcmZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE3MjE4ODUsImV4cCI6MjEwNzI5Nzg4NX0.M4uNXlHj8B-R5wtIlRfXfpIh3j1xjtcji4AmLcLkf_I";
     let supabaseClient = null;
-
     try {
       if (typeof supabase !== 'undefined' && SUPABASE_URL.startsWith("http")) {
         supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       }
     } catch (error) {
-      console.warn("Supabase bypassed (Running fully offline).", error);
+      console.warn("Supabase bypassed.");
     }
 
-    // --- 5. APP INITIALIZATION ---
+    // --- 5. APP INIT ---
     document.addEventListener("DOMContentLoaded", () => {
-
-        setTimeout(() => {
-        document.getElementById('splashScreen').classList.add('hidden');
-      }, 2200);
+      setTimeout(() => { document.getElementById('splashScreen').classList.add('hidden'); }, 2200);
       generateBHT();
-
+      
       const savedName = safeGetStorage('internName', '');
       if (savedName) document.getElementById('recordedBy').value = savedName;
-      
-      document.getElementById('recordedBy').addEventListener('input', (e) => {
-        safeSetStorage('internName', e.target.value);
-      });
+      document.getElementById('recordedBy').addEventListener('input', (e) => safeSetStorage('internName', e.target.value));
 
       updateOnlineStatus();
       document.getElementById('queueCount').textContent = getLocalQueue().length;
@@ -433,7 +489,7 @@
       if(viewId === 'syncView') document.getElementById('tabSyncBtn').classList.add('active');
     }
 
-    // --- 8. NETWORK & QUEUE LOGIC ---
+    // --- 8. NETWORK & QUEUE ---
     function updateOnlineStatus() {
       const badge = document.getElementById('connectionStatus');
       if (navigator.onLine) {
@@ -446,11 +502,7 @@
     window.addEventListener('online', updateOnlineStatus);
     window.addEventListener('offline', updateOnlineStatus);
 
-    function getLocalQueue() {
-      try { return JSON.parse(safeGetStorage('offline_histories', '[]')); }
-      catch (e) { return []; }
-    }
-    
+    function getLocalQueue() { return JSON.parse(safeGetStorage('offline_histories', '[]')); }
     function saveLocalQueue(queue) {
       safeSetStorage('offline_histories', JSON.stringify(queue));
       document.getElementById('queueCount').textContent = queue.length;
@@ -467,24 +519,40 @@
     // --- 9. FORM SUBMISSION ---
     document.getElementById('historyForm').addEventListener('submit', async (e) => {
       e.preventDefault();
+      
       const record = {
         recorded_by: document.getElementById('recordedBy').value,
         patient_id: document.getElementById('patientId').value,
+        admission_date: document.getElementById('admissionDate').value,
+        admission_time: document.getElementById('admissionTime').value,
+        ward: document.getElementById('ward').value,
+        bed_number: document.getElementById('bedNumber').value,
+        
         patient_name: document.getElementById('patientName').value,
         age: parseInt(document.getElementById('age').value),
         gender: document.getElementById('gender').value,
-        ward: document.getElementById('ward').value,
-        bed_number: document.getElementById('bedNumber').value,
+        marital_status: document.getElementById('maritalStatus').value,
+        children_count: document.getElementById('childrenCount').value,
+        occupation: document.getElementById('occupation').value,
+        residence: document.getElementById('residence').value,
+        guardian_details: document.getElementById('guardianDetails').value,
+        
         specialty: document.getElementById('specialty').value,
         case_category: document.getElementById('caseCategory').value,
         case_type: document.getElementById('caseType').value,
+        
         presenting_complaint: document.getElementById('presentingComplaint').value,
         history_presenting_illness: document.getElementById('historyPresentingIllness').value,
+        systemic_review: document.getElementById('systemicReview').value,
+        
         past_medical_history: document.getElementById('pastMedicalHistory').value,
-        drug_and_allergies: document.getElementById('drugAndAllergies').value,
+        surgical_history: document.getElementById('surgicalHistory').value,
+        drug_history: document.getElementById('drugHistory').value,
+        allergy_history: document.getElementById('allergyHistory').value,
+        
         family_history: document.getElementById('familyHistory').value,
         social_history: document.getElementById('socialHistory').value,
-        systemic_review: document.getElementById('systemicReview').value,
+        menstrual_history: document.getElementById('menstrualHistory').value,
         created_at: new Date().toISOString()
       };
 
@@ -514,9 +582,7 @@
       
       try {
         const { error } = await supabaseClient.from('patient_histories').insert(queue);
-        if (!error) {
-          saveLocalQueue([]);
-        }
+        if (!error) saveLocalQueue([]);
       } catch (err) { console.error('Sync failed', err); }
     }
 
@@ -532,35 +598,53 @@
       `).join('');
     }
 
-    // --- 11. SEARCH ---
+    // --- 11. ADVANCED SEARCH WITH FILTERS ---
     async function searchRecords() {
       const query = document.getElementById('searchInput').value.trim();
+      const filter = document.getElementById('searchFilter').value;
       const resultsDiv = document.getElementById('searchResults');
       resultsDiv.innerHTML = '<p style="text-align:center; padding:20px;">Searching...</p>';
 
       if (navigator.onLine && supabaseClient) {
         try {
-          let { data, error } = await supabaseClient.from('patient_histories')
-            .select('*').or(`ward.ilike.%${query}%,bed_number.ilike.%${query}%,patient_id.ilike.%${query}%`)
-            .order('created_at', { ascending: false });
+          let req = supabaseClient.from('patient_histories').select('*');
+          
+          if (filter === 'all') {
+            req = req.or(`ward.ilike.%${query}%,bed_number.ilike.%${query}%,patient_id.ilike.%${query}%,patient_name.ilike.%${query}%`);
+          } else if (filter === 'name') {
+            req = req.ilike('patient_name', `%${query}%`);
+          } else if (filter === 'ward') {
+            req = req.ilike('ward', `%${query}%`);
+          } else if (filter === 'bed') {
+            req = req.ilike('bed_number', `%${query}%`);
+          }
+
+          let { data, error } = await req.order('created_at', { ascending: false });
           if (error) throw error;
           renderSearchResults(data);
         } catch (err) {
           resultsDiv.innerHTML = `<p style="color:red">Database Error: Searching offline fallback...</p>`;
-          fallbackSearch(query);
+          fallbackSearch(query, filter);
         }
       } else {
-        fallbackSearch(query);
+        fallbackSearch(query, filter);
       }
     }
 
-    function fallbackSearch(query) {
+    function fallbackSearch(query, filter) {
       const queue = getLocalQueue();
-      const filtered = queue.filter(r => 
-        r.ward.toLowerCase().includes(query.toLowerCase()) || 
-        r.bed_number.toLowerCase().includes(query.toLowerCase()) || 
-        r.patient_id.toLowerCase().includes(query.toLowerCase())
-      );
+      const q = query.toLowerCase();
+      const filtered = queue.filter(r => {
+        if (filter === 'all') {
+          return r.ward.toLowerCase().includes(q) || r.bed_number.toLowerCase().includes(q) || r.patient_id.toLowerCase().includes(q) || r.patient_name.toLowerCase().includes(q);
+        } else if (filter === 'name') {
+          return r.patient_name.toLowerCase().includes(q);
+        } else if (filter === 'ward') {
+          return r.ward.toLowerCase().includes(q);
+        } else if (filter === 'bed') {
+          return r.bed_number.toLowerCase().includes(q);
+        }
+      });
       renderSearchResults(filtered);
     }
 
@@ -589,36 +673,64 @@
     function exportPDF(record) {
       const printArea = document.getElementById('printableArea');
       printArea.innerHTML = `
-        <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto;">
+        <div style="font-family: Arial, sans-serif; line-height: 1.5; max-width: 800px; margin: 0 auto; font-size: 14px;">
           <h2 style="text-align: center; text-decoration: underline; margin-bottom: 20px;">CLINICAL HISTORY SUMMARY</h2>
           
-          <table style="width:100%; border-collapse: collapse; margin-bottom: 20px;" border="1" cellpadding="10">
-            <tr><td width="50%"><strong>Patient Name:</strong> ${record.patient_name}</td><td><strong>BHT / ID:</strong> ${record.patient_id}</td></tr>
-            <tr><td><strong>Age / Gender:</strong> ${record.age} yrs / ${record.gender}</td><td><strong>Ward / Bed:</strong> ${record.ward} / Bed ${record.bed_number}</td></tr>
-            <tr><td><strong>Specialty:</strong> ${record.specialty}</td><td><strong>Presentation:</strong> ${record.case_type} (${record.case_category})</td></tr>
-            <tr><td colspan="2" style="background: #f8fafc;"><strong>Recorded By:</strong> ${record.recorded_by}</td></tr>
+          <table style="width:100%; border-collapse: collapse; margin-bottom: 20px;" border="1" cellpadding="6">
+            <tr>
+                <td width="50%"><strong>Patient Name:</strong> ${record.patient_name}</td>
+                <td><strong>BHT / ID:</strong> ${record.patient_id}</td>
+            </tr>
+            <tr>
+                <td><strong>Age / Gender:</strong> ${record.age} yrs / ${record.gender}</td>
+                <td><strong>Ward / Bed:</strong> ${record.ward} / Bed ${record.bed_number}</td>
+            </tr>
+            <tr>
+                <td><strong>Date / Time of Admission:</strong> ${record.admission_date || ''} ${record.admission_time || ''}</td>
+                <td><strong>Marital / Children:</strong> ${record.marital_status || 'N/A'} / ${record.children_count || '0'}</td>
+            </tr>
+            <tr>
+                <td><strong>Occupation:</strong> ${record.occupation || 'N/A'}</td>
+                <td><strong>Residence:</strong> ${record.residence || 'N/A'}</td>
+            </tr>
+            <tr>
+                <td><strong>Specialty:</strong> ${record.specialty}</td>
+                <td><strong>Presentation:</strong> ${record.case_type} (${record.case_category})</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="background: #f8fafc;"><strong>Recorded By:</strong> ${record.recorded_by}</td>
+            </tr>
           </table>
 
-          <h4 style="border-bottom: 1px solid #000; padding-bottom: 4px; margin-top: 20px;">1. Presenting Complaint (PC)</h4>
-          <p style="margin-top: 5px;">${record.presenting_complaint}</p>
+          <h4 style="border-bottom: 1px solid #000; padding-bottom: 2px; margin-top: 15px;">1. Presenting Complaint (PC)</h4>
+          <p style="margin-top: 4px;">${record.presenting_complaint}</p>
 
-          <h4 style="border-bottom: 1px solid #000; padding-bottom: 4px; margin-top: 20px;">2. History of Presenting Illness (HPI)</h4>
-          <p style="margin-top: 5px; white-space: pre-wrap;">${record.history_presenting_illness}</p>
+          <h4 style="border-bottom: 1px solid #000; padding-bottom: 2px; margin-top: 15px;">2. History of Presenting Illness (HPI)</h4>
+          <p style="margin-top: 4px; white-space: pre-wrap;">${record.history_presenting_illness}</p>
 
-          <h4 style="border-bottom: 1px solid #000; padding-bottom: 4px; margin-top: 20px;">3. Past Medical & Surgical History</h4>
-          <p style="margin-top: 5px; white-space: pre-wrap;">${record.past_medical_history || 'N/A'}</p>
+          <h4 style="border-bottom: 1px solid #000; padding-bottom: 2px; margin-top: 15px;">3. Systemic Review</h4>
+          <p style="margin-top: 4px; white-space: pre-wrap;">${record.systemic_review || 'N/A'}</p>
 
-          <h4 style="border-bottom: 1px solid #000; padding-bottom: 4px; margin-top: 20px;">4. Drug History & Allergies</h4>
-          <p style="margin-top: 5px; white-space: pre-wrap;">${record.drug_and_allergies || 'N/A'}</p>
+          <h4 style="border-bottom: 1px solid #000; padding-bottom: 2px; margin-top: 15px;">4. Past Medical History</h4>
+          <p style="margin-top: 4px; white-space: pre-wrap;">${record.past_medical_history || 'N/A'}</p>
 
-          <h4 style="border-bottom: 1px solid #000; padding-bottom: 4px; margin-top: 20px;">5. Family History</h4>
-          <p style="margin-top: 5px; white-space: pre-wrap;">${record.family_history || 'N/A'}</p>
+          <h4 style="border-bottom: 1px solid #000; padding-bottom: 2px; margin-top: 15px;">5. Past Surgical History</h4>
+          <p style="margin-top: 4px; white-space: pre-wrap;">${record.surgical_history || 'N/A'}</p>
 
-          <h4 style="border-bottom: 1px solid #000; padding-bottom: 4px; margin-top: 20px;">6. Social & Personal History</h4>
-          <p style="margin-top: 5px; white-space: pre-wrap;">${record.social_history || 'N/A'}</p>
+          <h4 style="border-bottom: 1px solid #000; padding-bottom: 2px; margin-top: 15px;">6. Drug History</h4>
+          <p style="margin-top: 4px; white-space: pre-wrap;">${record.drug_history || 'N/A'}</p>
 
-          <h4 style="border-bottom: 1px solid #000; padding-bottom: 4px; margin-top: 20px;">7. Systemic Review</h4>
-          <p style="margin-top: 5px; white-space: pre-wrap;">${record.systemic_review || 'N/A'}</p>
+          <h4 style="border-bottom: 1px solid #000; padding-bottom: 2px; margin-top: 15px;">7. Allergy History</h4>
+          <p style="margin-top: 4px; white-space: pre-wrap;">${record.allergy_history || 'N/A'}</p>
+
+          <h4 style="border-bottom: 1px solid #000; padding-bottom: 2px; margin-top: 15px;">8. Family History</h4>
+          <p style="margin-top: 4px; white-space: pre-wrap;">${record.family_history || 'N/A'}</p>
+
+          <h4 style="border-bottom: 1px solid #000; padding-bottom: 2px; margin-top: 15px;">9. Social History</h4>
+          <p style="margin-top: 4px; white-space: pre-wrap;">${record.social_history || 'N/A'}</p>
+
+          <h4 style="border-bottom: 1px solid #000; padding-bottom: 2px; margin-top: 15px;">10. Menstrual History</h4>
+          <p style="margin-top: 4px; white-space: pre-wrap;">${record.menstrual_history || 'N/A'}</p>
         </div>
       `;
 
